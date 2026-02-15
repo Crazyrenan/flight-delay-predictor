@@ -75,7 +75,10 @@ def predict_delay(input: FlightInput):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(
+        status_code=400, 
+        detail=f"Input tidak dikenal: {str(e)}. Pastikan menggunakan kode maskapai (misal: AA) dan nama kota yang sesuai dataset."
+    )
 
 @app.get("/")
 def health():

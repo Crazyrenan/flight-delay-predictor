@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv
+venv/
+ENV/
+.env
+
+# Node.js
+web/node_modules/
+web/dist/
+web/.env
+.eslintcache
+
+# Data & Models (Opsional: jika file >50MB sebaiknya di-ignore)
+data/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Data Files (Besar & Sensitif)
+data/raw/Flight_Delay.parquet
+
+# Atau, untuk mengabaikan SEMUA file parquet di dalam folder data
+data/**/*.parquet

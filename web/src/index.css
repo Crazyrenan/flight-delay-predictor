@@ -1,11 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* Tambahan agar background gelap terlihat solid sejak awal */
+@theme {
+  --color-brand-blue: #3b82f6;
+}
+
 html, body {
-  background-color: #020617;
+  /* Menggunakan gradient agar ada dimensi visual, tidak flat hitam */
+  background: radial-gradient(circle at top right, #0f172a, #020617);
   color: #f8fafc;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
