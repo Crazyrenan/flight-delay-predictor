@@ -79,7 +79,19 @@ def predict_delay(input: FlightInput):
         status_code=400, 
         detail=f"Input tidak dikenal: {str(e)}. Pastikan menggunakan kode maskapai (misal: AA) dan nama kota yang sesuai dataset."
     )
-
+    
+@app.get("/options")
+def get_options():
+    try:
+        return {
+            "airlines": encoders['Marketing_Airline_Network'].classes_.tolist(),
+            "cities": encoders['OriginCityName'].classes_.tolist() 
+            # Kita asumsikan kota asal dan tujuan list-nya sama. 
+            # Jika beda, bisa tambahkan "dest_cities": encoders['DestCityName'].classes_.tolist()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
 @app.get("/")
 def health():
     return {"status": "online"}
