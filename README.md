@@ -13,7 +13,7 @@
 - **High-Performance ML Model**: Menggunakan algoritma **XGBoost** (XGBClassifier) yang dioptimalkan untuk klasifikasi status keterlambatan secara akurat.
 - **Asynchronous API**: Backend berbasis **FastAPI** yang mendukung pemrosesan permintaan prediksi secara asinkron untuk efisiensi tinggi.
 - **Interactive Dashboard**: Antarmuka pengguna modern yang dibangun dengan **React** untuk pengisian data penerbangan dan visualisasi hasil prediksi.
-- **Automated Data Transformation**: Menggunakan **LabelEncoder** untuk memproses fitur kategorikal seperti bandara asal (Origin) dan tujuan (Dest) secara instan.
+- **Automated Data Transformation**: Menggunakan **LabelEncoder** untuk memproses fitur kategorikal seperti bandara asal (`Origin`) dan tujuan (`Dest`) secara instan.
 
 ---
 
@@ -37,8 +37,12 @@
 ### 1. Persiapan Backend (API)
 Masuk ke direktori utama proyek, lalu jalankan:
 
+
 # Instal dependensi yang diperlukan
 pip install pandas scikit-learn xgboost fastapi uvicorn joblib
+
+# Jalankan server API
+python api.py
 API akan berjalan di http://localhost:8000. Dokumentasi interaktif tersedia di /docs.
 
 2. Persiapan Frontend (Web)
@@ -65,16 +69,9 @@ LinkedIn: Jonathan Axl Wibowo
 
 Email: jonathan.axlw@gmail.com
 
-Portfolio: 
+Portfolio: jonathanaxl.id
 
 <p align="center">
 <i>Dikembangkan dengan fokus pada integritas data dan pengalaman pengguna yang luar biasa.</i>
 </p>
-# Instal dependensi yang diperlukan
-pip install pandas scikit-learn xgboost fastapi uvicorn joblib
-
-# Jalankan server API
-python api.py
-
 ```bash
-
