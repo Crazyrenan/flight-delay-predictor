@@ -5,15 +5,15 @@
 # ✈️ WINDBREAKER.Ai
 ### *Enterprise-Grade Flight Delay Predictive Analytics*
 
-**WINDBREAKER.Ai** adalah solusi analitik prediktif modern yang dirancang untuk industri penerbangan. Proyek ini mengintegrasikan *Machine Learning* performa tinggi dengan arsitektur web produksi untuk memprediksi keterlambatan penerbangan secara real-time berdasarkan data historis dan operasional.
+**WINDBREAKER.Ai** adalah solusi analitik prediktif modern yang dirancang untuk industri penerbangan. Proyek ini mengintegrasikan *Machine Learning* performa tinggi dengan arsitektur web produksi untuk memprediksi keterlambatan penerbangan secara real-time berdasarkan data operasional.
 
 ---
 
 ## 🌟 Fitur Unggulan
-- **High-Performance ML Model**: Menggunakan algoritma **XGBoost** yang dioptimalkan untuk klasifikasi delay yang akurat.
-- **Asynchronous API**: Backend berbasis **FastAPI** yang mendukung pemrosesan permintaan konkuren dengan latensi rendah.
-- **Modern User Interface**: Dashboard interaktif yang dibangun dengan **React** dan **Tailwind CSS** untuk visualisasi prediksi yang jernih.
-- **Automated Preprocessing**: Pipeline data menggunakan **Scikit-Learn Label Encoders** untuk transformasi fitur kategorikal secara instan.
+- **High-Performance ML Model**: Menggunakan algoritma **XGBoost** (XGBClassifier) yang dioptimalkan untuk klasifikasi status keterlambatan secara akurat.
+- **Asynchronous API**: Backend berbasis **FastAPI** yang mendukung pemrosesan permintaan prediksi secara asinkron untuk efisiensi tinggi.
+- **Interactive Dashboard**: Antarmuka pengguna modern yang dibangun dengan **React** untuk pengisian data penerbangan dan visualisasi hasil prediksi.
+- **Automated Data Transformation**: Menggunakan **LabelEncoder** untuk memproses fitur kategorikal seperti bandara asal (Origin) dan tujuan (Dest) secara instan.
 
 ---
 
@@ -21,34 +21,57 @@
 
 ### **AI & Backend Engine**
 - **Language**: Python 3.10+
-- **Framework**: FastAPI (Production-ready ASGI server)
-- **ML Libraries**: XGBoost, Scikit-Learn, Pandas, Joblib
-- **Model Storage**: Pickle-based serialization for fast inference
+- **Framework**: FastAPI (ASGI Server)
+- **ML Libraries**: XGBoost, Scikit-Learn, Pandas
+- **Inference**: Joblib & Pickle untuk memuat model dan encoder yang telah dilatih.
 
 ### **Frontend (Production UI)**
-- **Library**: React.js (Vite)
+- **Framework**: React.js dengan TypeScript (Vite)
 - **Styling**: Tailwind CSS
-- **Routing**: React Router DOM
-- **HTTP Client**: Axios
-
----
-
-## 🏗 Arsitektur Proyek
-Sistem ini menggunakan pemisahan tanggung jawab yang ketat untuk memastikan skalabilitas:
-1. **Model Training (`train.py`)**: Skrip untuk melatih model XGBoost dan mengekspor encoder fitur.
-2. **Inference API (`api.py`)**: Server backend yang memuat model terlatih dan menyediakan endpoint prediksi `/predict`.
-3. **Frontend Dashboard (`/web`)**: Antarmuka pengguna yang mengonsumsi API untuk menyajikan hasil prediksi secara visual.
+- **HTTP Client**: Axios untuk komunikasi data dengan API.
 
 ---
 
 ## 🚀 Panduan Instalasi
 
 ### 1. Persiapan Backend (API)
-Pastikan Python sudah terinstal, lalu jalankan:
-```bash
+Masuk ke direktori utama proyek, lalu jalankan:
 
-# Instal dependensi
+# Instal dependensi yang diperlukan
 pip install pandas scikit-learn xgboost fastapi uvicorn joblib
+API akan berjalan di http://localhost:8000. Dokumentasi interaktif tersedia di /docs.
 
-# Jalankan server
-python api.py
+2. Persiapan Frontend (Web)
+Buka terminal baru, masuk ke folder web, lalu jalankan:
+
+Bash
+
+cd web
+npm install
+npm run dev
+📊 Metodologi Machine Learning
+Proses pengembangan model WINDBREAKER.Ai meliputi:
+
+Feature Selection: Mengidentifikasi variabel kunci seperti waktu keberangkatan (DepTime), keterlambatan keberangkatan (DepDelay), dan jadwal tiba (CRSArrTime).
+
+Categorical Encoding: Transformasi data bandara dan maskapai menggunakan Label Encoder yang konsisten antara tahap pelatihan dan inferensi.
+
+Model Training: Optimalisasi XGBoost untuk meminimalkan error pada target prediksi keterlambatan kedatangan (ARR_DELAY).
+
+📫 Kontak & Kontribusi
+Jonathan Axl Wibowo
+
+LinkedIn: Jonathan Axl Wibowo
+
+Email: jonathan.axlw@gmail.com
+
+Portfolio: 
+
+<p align="center">
+<i>Dikembangkan dengan fokus pada integritas data dan pengalaman pengguna yang luar biasa.</i>
+</p>
+
+# Jalankan server API
+python api.py****
+
+```bash
