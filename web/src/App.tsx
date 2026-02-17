@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Landing from './pages/Landing';
+import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Register from './pages/Register';
 
 const App = () => {
   // Simulasi Auth (Nanti kita ganti dengan sistem login beneran)
@@ -19,7 +21,9 @@ const App = () => {
         />
         
         {/* Login Page (Nanti dibuat) */}
-        <Route path="/login" element={<div className="text-white text-center p-20">Login Page Coming Soon</div>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
       </Routes>
     </BrowserRouter>
   );

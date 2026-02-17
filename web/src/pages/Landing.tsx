@@ -46,7 +46,7 @@ const Landing = () => {
         </div>
         <div className="flex gap-4 text-sm font-bold">
           <Link to="/login" className="px-4 py-2 hover:text-blue-400 transition-colors">LOGIN</Link>
-          <Link to="/dashboard" className="px-6 py-2 bg-white text-black rounded-full hover:bg-blue-500 hover:text-white transition-all shadow-lg shadow-white/5 uppercase tracking-widest text-[10px]">
+          <Link to="/register" className="px-6 py-2 bg-white text-black rounded-full hover:bg-blue-500 hover:text-white transition-all shadow-lg shadow-white/5 uppercase tracking-widest text-[10px] flex items-center justify-center">
             Get Started
           </Link>
         </div>
