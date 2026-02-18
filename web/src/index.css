@@ -5,7 +5,6 @@
 }
 
 html, body {
-  /* Ini warna dasar biru tua yang keren, bukan hitam pekat */
   background-color: #0f172a; 
   background-image: 
     radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),

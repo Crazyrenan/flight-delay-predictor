@@ -14,7 +14,7 @@ MODEL_PATH = os.path.join(MODEL_DIR, 'xgb_flight_delay.pkl')
 ENCODER_PATH = os.path.join(MODEL_DIR, 'encoders.pkl')
 
 def train_model():
-    print("--- VERSION 3.0: NO CANCELLED COLUMN ---") 
+    print("--- NO CANCELLED COLUMN ---") 
     
     # 0. Safety Check
     if not os.path.exists(MODEL_DIR):
@@ -47,11 +47,8 @@ def train_model():
 
     print(f"Training on {len(df):,} flights.")
 
-    print("--- [PHASE 2] Feature Engineering ---")
-    # 1. Target: Binary Classification
+    print("--- Feature Engineering ---")
     df['is_delayed'] = (df['ArrDelayMinutes'] > 15).astype(int)
-    
-    # 2. Time of Day (Binning)
     df['DepHour'] = (df['CRSDepTime'] // 100).astype(int)
     
     # 3. Calculate DayOfWeek from FlightDate
