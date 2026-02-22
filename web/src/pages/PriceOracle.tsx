@@ -128,9 +128,9 @@ const PriceOracle = () => {
         </button>
       </div>
 
-      <div className="col-span-12 lg:col-span-5 h-full min-h-[400px]">
+      <div className="col-span-12 lg:col-span-5 h-full min-h-100">
         {result ? (
-          <div className="h-full bg-gradient-to-b from-slate-900 to-black border border-app-border p-10 rounded-5xl flex flex-col items-center justify-center text-center relative overflow-hidden shadow-2xl">
+          <div className="h-full bg-linear-to-b from-slate-900 to-black border border-app-border p-10 rounded-5xl flex flex-col items-center justify-center text-center relative overflow-hidden shadow-2xl">
             <div className="absolute -top-20 -right-20 w-64 h-64 blur-[120px] rounded-full opacity-20 bg-brand-blue"></div>
             <h3 className="text-[10px] font-black text-nav-fg uppercase tracking-widest mb-6">Estimated Fare</h3>
             <h3 className="text-6xl font-black mb-6 tracking-tighter italic">

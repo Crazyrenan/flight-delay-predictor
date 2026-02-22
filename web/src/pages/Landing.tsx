@@ -37,7 +37,7 @@ const Landing = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-slate-100 font-sans overflow-hidden selection:bg-blue-500 selection:text-white">
+    <div className="min-h-screen bg-app-bg text-slate-100 font-sans overflow-hidden selection:bg-blue-500 selection:text-white">
       
       {/* --- NAVBAR --- */}
       <nav className="fixed top-0 w-full p-6 flex justify-between items-center z-50 backdrop-blur-sm bg-slate-900/30 border-b border-white/5">
