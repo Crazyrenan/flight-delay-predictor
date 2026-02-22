@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 
 const Login = () => {
-  // State untuk form & API
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,7 +20,6 @@ const Login = () => {
   const visualRef = useRef(null);
   const navigate = useNavigate();
 
-  // Animasi Masuk
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(visualRef.current, {
@@ -51,7 +49,7 @@ const Login = () => {
     try {
       // FastAPI OAuth2 requires form data
       const formData = new URLSearchParams();
-      formData.append('username', email); // Walaupun email, FastAPI membacanya sebagai 'username'
+      formData.append('username', email);
       formData.append('password', password);
 
       const response = await fetch("http://localhost:8000/api/login", {
@@ -65,7 +63,6 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Simpan token ke localStorage
         localStorage.setItem("user_token", data.access_token);
         localStorage.setItem("user_name", data.user_name);
         // Arahkan ke dashboard
@@ -83,9 +80,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-[#0f172a] text-slate-100 font-sans grid grid-cols-1 lg:grid-cols-2 overflow-hidden selection:bg-blue-500 selection:text-white">
       
-      {/* --- LEFT SIDE: VISUAL (The View from 30,000ft) --- */}
       <div ref={visualRef} className="relative hidden lg:flex flex-col justify-between p-12 bg-slate-900 overflow-hidden">
-        {/* Abstract Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-luminosity"></div>
         <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-slate-900/80 via-blue-900/20 to-slate-900/90"></div>
         

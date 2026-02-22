@@ -1,22 +1,29 @@
+import os
+import jwt
+import sqlite3
+from dotenv import load_dotenv
+from datetime import datetime, timedelta
 from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr
 from passlib.context import CryptContext
-from datetime import datetime, timedelta
-import jwt
-import sqlite3
+
+load_dotenv()
 
 router = APIRouter()
 
-SECRET_KEY = "ganti_dengan_kunci_rahasia_yang_panjang_dan_acak_nantinya"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback_secret_key_for_dev_only")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
+DB_PATH = os.getenv("DB_PATH", "windbreaker_users.db")
+
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
+
 def get_db():
-    conn = sqlite3.connect("windbreaker_users.db")
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     try:
         yield conn
@@ -24,7 +31,7 @@ def get_db():
         conn.close()
 
 def init_db():
-    conn = sqlite3.connect("windbreaker_users.db")
+    conn = sqlite3.connect(DB_PATH)
     conn.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,20 +45,24 @@ def init_db():
 
 init_db()
 
+# --- SCHEMAS ---
+
 class UserRegister(BaseModel):
     name: str
     email: EmailStr
     password: str
 
+class ForgotPassword(BaseModel):
+    email: EmailStr
+    new_password: str
+
+
+
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: sqlite3.Connection = Depends(get_db)):
     credentials_exception = HTTPException(
@@ -71,6 +82,8 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: sqlite3.Connection
     if user is None:
         raise credentials_exception
     return user
+
+# --- AUTH ENDPOINTS ---
 
 @router.post("/api/register", status_code=status.HTTP_201_CREATED)
 def register(user: UserRegister, db: sqlite3.Connection = Depends(get_db)):
@@ -99,6 +112,17 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: sqlite3.Connecti
         data={"sub": user["email"]}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer", "user_name": user["name"]}
+
+@router.post("/api/forgot-password")
+def forgot_password(req: ForgotPassword, db: sqlite3.Connection = Depends(get_db)):
+    db_user = db.execute("SELECT * FROM users WHERE email = ?", (req.email,)).fetchone()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="Email tidak ditemukan")
+    
+    hashed_password = pwd_context.hash(req.new_password)
+    db.execute("UPDATE users SET password = ? WHERE email = ?", (hashed_password, req.email))
+    db.commit()
+    return {"message": "Password berhasil diperbarui"}
 
 @router.get("/api/me")
 def read_users_me(current_user: sqlite3.Row = Depends(get_current_user)):
