@@ -4,6 +4,13 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     PROJECT_NAME: str = "WINDBREAKER.AI"
     
+    # --- Authentication Settings ---
+    # In a real app, generate a secure random key and store it in an environment variable
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "your-super-secret-key-change-this-in-production")
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    # -------------------------------
+
     DB_PATH: str = "windbreaker_users.db"
     
     # Path Arsitektur

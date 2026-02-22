@@ -7,14 +7,14 @@ const PriceOracle = () => {
     airline: '',
     origin: '',
     destination: '',
-    duration_mins: 120
+    travel_time: '2h 30m'
   });
 
   const [options, setOptions] = useState<{airlines: string[], cities: string[]}>({ airlines: [], cities: [] });
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{estimated_price: number} | null>(null);
 
-useEffect(() => {
+  useEffect(() => {
     const fetchOptions = async () => {
       try {
         const res = await axios.get('http://127.0.0.1:8000/api/price-options');
@@ -29,25 +29,36 @@ useEffect(() => {
     fetchOptions();
   }, []);
 
- const handlePredictPrice = async () => {
-  setLoading(true);
-  try {
-    const token = localStorage.getItem("user_token");
-    const response = await axios.post('http://127.0.0.1:8000/api/predict-price', {
-      airline: formData.airline,
-      origin: formData.origin,        // Pastikan ini terisi dari dropdown
-      destination: formData.destination,
-      duration_mins: formData.duration_mins
-    }, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setResult(response.data);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setLoading(false);
-  }
-};
+  const parseDuration = (timeStr: string) => {
+    let h = 0, m = 0;
+    const hMatch = timeStr.match(/(\d+)h/i);
+    const mMatch = timeStr.match(/(\d+)m/i);
+    if (hMatch) h = parseInt(hMatch[1], 10);
+    if (mMatch) m = parseInt(mMatch[1], 10);
+    return (h * 60) + m;
+  };
+
+  const handlePredictPrice = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("user_token");
+      const durationInt = parseDuration(formData.travel_time);
+      
+      const response = await axios.post('http://127.0.0.1:8000/api/predict-price', {
+        airline: formData.airline,
+        origin: formData.origin,
+        destination: formData.destination,
+        duration_mins: durationInt
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setResult(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="max-w-6xl w-full grid grid-cols-12 gap-6 mx-auto">
@@ -61,7 +72,7 @@ useEffect(() => {
       <div className="col-span-12 lg:col-span-7 bg-slate-900/40 border border-app-border p-10 rounded-4xl backdrop-blur-md">
         <div className="grid grid-cols-2 gap-x-6 gap-y-8">
           <div className="col-span-2">
-            <label className="text-[10px] font-black text-nav-fg uppercase tracking-widest mb-3 block">Carrier</label>
+            <label className="text-[10px] font-black text-nav-fg uppercase tracking-widest mb-3 block">Airline Name</label>
             <select 
               className="w-full bg-app-bg border border-app-border rounded-2xl p-4 text-sm outline-none focus:border-brand-blue transition-all"
               value={formData.airline}
@@ -73,7 +84,7 @@ useEffect(() => {
           </div>
 
           <div className="col-span-1">
-            <label className="text-[10px] font-black text-nav-fg uppercase tracking-widest mb-3 block">Origin</label>
+            <label className="text-[10px] font-black text-nav-fg uppercase tracking-widest mb-3 block">Departure Airport</label>
             <select 
               className="w-full bg-app-bg border border-app-border rounded-2xl p-4 text-sm outline-none focus:border-brand-blue"
               value={formData.origin}
@@ -85,7 +96,7 @@ useEffect(() => {
           </div>
 
           <div className="col-span-1">
-            <label className="text-[10px] font-black text-nav-fg uppercase tracking-widest mb-3 block">Destination</label>
+            <label className="text-[10px] font-black text-nav-fg uppercase tracking-widest mb-3 block">Destination Airport</label>
             <select 
               className="w-full bg-app-bg border border-app-border rounded-2xl p-4 text-sm outline-none focus:border-brand-blue"
               value={formData.destination}
@@ -97,12 +108,13 @@ useEffect(() => {
           </div>
 
           <div className="col-span-2">
-            <label className="text-[10px] font-black text-nav-fg uppercase tracking-widest mb-3 block">Duration (Mins)</label>
+            <label className="text-[10px] font-black text-nav-fg uppercase tracking-widest mb-3 block">Travel Time (e.g., 51h 15m)</label>
             <input 
-              type="number" 
+              type="text" 
+              placeholder="0h 0m"
               className="w-full bg-app-bg border border-app-border rounded-2xl p-4 text-sm outline-none focus:border-brand-blue"
-              value={formData.duration_mins}
-              onChange={(e) => setFormData({...formData, duration_mins: parseInt(e.target.value) || 0})}
+              value={formData.travel_time}
+              onChange={(e) => setFormData({...formData, travel_time: e.target.value})}
             />
           </div>
         </div>

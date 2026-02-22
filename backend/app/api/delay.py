@@ -26,9 +26,20 @@ async def predict_delay(req: FlightInput, current_user: dict = Depends(get_curre
         day_sin = np.sin(2 * np.pi * day_of_week / 7)
         day_cos = np.cos(2 * np.pi * day_of_week / 7)
 
-        airline_enc = delay_encoders['Marketing_Airline_Network'].transform([req.airline])[0]
-        origin_enc = delay_encoders['OriginCityName'].transform([req.origin])[0]
-        dest_enc = delay_encoders['DestCityName'].transform([req.destination])[0]
+        try:
+            airline_enc = delay_encoders['Marketing_Airline_Network'].transform([req.airline])[0]
+        except ValueError:
+            airline_enc = 0
+            
+        try:
+            origin_enc = delay_encoders['OriginCityName'].transform([req.origin])[0]
+        except ValueError:
+            origin_enc = 0
+
+        try:
+            dest_enc = delay_encoders['DestCityName'].transform([req.destination])[0]
+        except ValueError:
+            dest_enc = 0
 
         features = [dep_hour, month_sin, month_cos, day_sin, day_cos, 
                     airline_enc, origin_enc, dest_enc]
